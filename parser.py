@@ -83,12 +83,20 @@ def collection_ads(soup_obj: BeautifulSoup):
 def main():
     # r = getWebsite(url=DEFAULT_URL_CATALOG)
     # saveHTML(html=r.text, path=DEFAULT_PATH_FILE_WEB_PAGE, name=DEFAULT_NAME)
-    page = openFileHTML(path=DEFAULT_PATH_FILE_WEB_PAGE, name=DEFAULT_NAME)
-    soup = BeautifulSoup(markup=page, features='lxml')
+    # page = openFileHTML(path=DEFAULT_PATH_FILE_WEB_PAGE, name=DEFAULT_NAME)
+    # soup = BeautifulSoup(markup=page, features='lxml')
+    # # collection_ads(soup_obj=soup)  # 
     # search_link_page(soup_obj=soup) # search for links on a page
-    collection_ads(soup_obj=soup)
+    r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG['1'])
+    soup = BeautifulSoup(markup=r.text, features='lxml')
+    max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
+    tmp = []
+    for i in range(2, max_page):
+        if not(i in tmp):
+            r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i)])
+            soup = BeautifulSoup(markup=r.text, features='lxml')
+            search_link_page(soup_obj=soup)
+        tmp.append(i)
     
-
-
 if __name__ == '__main__':
     main()
