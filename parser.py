@@ -76,7 +76,29 @@ def collection_ads(soup_obj: BeautifulSoup):
             description=description,
             price=price,
             location=location))
-    
+
+def parser():
+    r = getWebsite(url=DEFAULT_URL_CATALOG)
+    soup = BeautifulSoup(markup=r.text, features='lxml')
+    search_link_page(soup_obj=soup)
+    max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
+    list_not_keys = []
+    # for i in range(2, max_page):
+    i = 2
+    while i < max_page:
+        try:
+            r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i)])
+            soup = BeautifulSoup(markup=r.text, features='lxml')
+            print('start search')
+            search_link_page(soup_obj=soup)
+            i += 1
+        except KeyError:
+            print('not key: {}'.format(i))
+            r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i-1)])
+            soup = BeautifulSoup(markup=r.text, features='lxml')
+            search_link_page(soup_obj=soup)
+            
+    print(NUMBER_LINKS_PAGES_CATALOG)
 
 def main():
     # r = getWebsite(url='https://www.kufar.by/listings?cat=17010&rgn=all&cursor=eyJ0IjoiYWJzIiwiZiI6dHJ1ZSwicCI6NX0%3D')
@@ -85,21 +107,27 @@ def main():
     # soup = BeautifulSoup(markup=page, features='lxml')
     # # collection_ads(soup_obj=soup)  # 
     # search_link_page(soup_obj=soup) # search for links on a page
-    r = getWebsite(url=DEFAULT_URL_CATALOG)
-    soup = BeautifulSoup(markup=r.text, features='lxml')
-    search_link_page(soup_obj=soup)
-    max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
-    list_not_keys = []
-    for i in range(2, max_page):
-        r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i)])
-        soup = BeautifulSoup(markup=r.text, features='lxml')
-        search_link_page(soup_obj=soup)
-        print(NUMBER_LINKS_PAGES_CATALOG.keys())
-    print(NUMBER_LINKS_PAGES_CATALOG)
+    # r = getWebsite(url=DEFAULT_URL_CATALOG)
+    # soup = BeautifulSoup(markup=r.text, features='lxml')
+    # search_link_page(soup_obj=soup)
+    # max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
+    # list_not_keys = []
+    # for i in range(2, max_page):
+    #     r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i)])
+    #     soup = BeautifulSoup(markup=r.text, features='lxml')
+    #     search_link_page(soup_obj=soup)
     # r = getWebsite(url='https://www.kufar.by/listings?cat=17010&rgn=all')
     # soup = BeautifulSoup(markup=r.text, features='lxml')
     # search_link_page(soup_obj=soup)
     # print(NUMBER_LINKS_PAGES_CATALOG)
+    # try:
+    #     parser()
+    #     print(NUMBER_LINKS_PAGES_CATALOG)
+
+    # except KeyError:
+    #     print('restart, KeyError')
+    #     parser()
+    parser()
     
     
 if __name__ == '__main__':
