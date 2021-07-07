@@ -77,6 +77,7 @@ def collection_ads(soup_obj: BeautifulSoup):
             price=price,
             location=location))
 
+
 def parser():
     r = getWebsite(url=DEFAULT_URL_CATALOG)
     soup = BeautifulSoup(markup=r.text, features='lxml')
@@ -91,6 +92,7 @@ def parser():
             soup = BeautifulSoup(markup=r.text, features='lxml')
             print('start search')
             search_link_page(soup_obj=soup)
+            collection_ads(soup_obj=soup)
             i += 1
         except KeyError:
             print('not key: {}'.format(i))
@@ -98,7 +100,7 @@ def parser():
             soup = BeautifulSoup(markup=r.text, features='lxml')
             search_link_page(soup_obj=soup)
             
-    print(NUMBER_LINKS_PAGES_CATALOG)
+    print(GOODS)
 
 def main():
     # r = getWebsite(url='https://www.kufar.by/listings?cat=17010&rgn=all&cursor=eyJ0IjoiYWJzIiwiZiI6dHJ1ZSwicCI6NX0%3D')
