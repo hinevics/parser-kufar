@@ -39,7 +39,6 @@ def search_link_page(soup_obj: BeautifulSoup):
     numbers_webpages = soup_obj.find('div', {'data-name':'listings-pagination'}).find_all('a')
     # Get page numbers and links
     for i in numbers_webpages:
-    #     if not (i.text in NUMBER_LINKS_PAGES_CATALOG.keys()):
         NUMBER_LINKS_PAGES_CATALOG[i.text] = 'https://www.kufar.by/' + i.get('href')
 
 def parser_data_and_time(data_time: str):
@@ -84,7 +83,6 @@ def parser():
     search_link_page(soup_obj=soup)
     max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
     list_not_keys = []
-    # for i in range(2, max_page):
     i = 2
     while i < max_page:
         try:
@@ -103,32 +101,7 @@ def parser():
     print(GOODS)
 
 def main():
-    # r = getWebsite(url='https://www.kufar.by/listings?cat=17010&rgn=all&cursor=eyJ0IjoiYWJzIiwiZiI6dHJ1ZSwicCI6NX0%3D')
-    # saveHTML(html=r.text, path=DEFAULT_PATH_FILE_WEB_PAGE, name=DEFAULT_NAME)
-    # page = openFileHTML(path=DEFAULT_PATH_FILE_WEB_PAGE, name=DEFAULT_NAME)
-    # soup = BeautifulSoup(markup=page, features='lxml')
-    # # collection_ads(soup_obj=soup)  # 
-    # search_link_page(soup_obj=soup) # search for links on a page
-    # r = getWebsite(url=DEFAULT_URL_CATALOG)
-    # soup = BeautifulSoup(markup=r.text, features='lxml')
-    # search_link_page(soup_obj=soup)
-    # max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
-    # list_not_keys = []
-    # for i in range(2, max_page):
-    #     r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i)])
-    #     soup = BeautifulSoup(markup=r.text, features='lxml')
-    #     search_link_page(soup_obj=soup)
-    # r = getWebsite(url='https://www.kufar.by/listings?cat=17010&rgn=all')
-    # soup = BeautifulSoup(markup=r.text, features='lxml')
-    # search_link_page(soup_obj=soup)
-    # print(NUMBER_LINKS_PAGES_CATALOG)
-    # try:
-    #     parser()
-    #     print(NUMBER_LINKS_PAGES_CATALOG)
-
-    # except KeyError:
-    #     print('restart, KeyError')
-    #     parser()
+    
     parser()
     
     
