@@ -77,8 +77,8 @@ def collection_ads(soup_obj: BeautifulSoup):
             location=location))
 
 
-def parser():
-    r = getWebsite(url=DEFAULT_URL_CATALOG)
+def parser(url):
+    r = getWebsite(url=url)
     soup = BeautifulSoup(markup=r.text, features='lxml')
     search_link_page(soup_obj=soup)
     max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
@@ -88,12 +88,10 @@ def parser():
         try:
             r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i)])
             soup = BeautifulSoup(markup=r.text, features='lxml')
-            print('start search')
             search_link_page(soup_obj=soup)
             collection_ads(soup_obj=soup)
             i += 1
         except KeyError:
-            print('not key: {}'.format(i))
             r = getWebsite(url=NUMBER_LINKS_PAGES_CATALOG[str(i-1)])
             soup = BeautifulSoup(markup=r.text, features='lxml')
             search_link_page(soup_obj=soup)
@@ -101,9 +99,11 @@ def parser():
     print(GOODS)
 
 def main():
-    
-    parser()
-    
+    # parser(url='https://www.kufar.by/listings?rgn=all')
+    r = getWebsite(url='https://www.kufar.by/listings?rgn=all')
+    soup = BeautifulSoup(markup=r.text, features='lxml')
+    search_link_page(soup_obj=soup)
+    collection_ads()
     
 if __name__ == '__main__':
     main()
