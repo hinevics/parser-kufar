@@ -11,31 +11,18 @@ def getWebsite(url: str):
     """
     description: 
             Makes a request to the web page.
-    to-do:
-            1. make a check for the presence of the base
-            2. make a reconciliation of keys
-            3. make a verification of links 
-    args:   catalogs : dict : "Dictionary of directory names and links to them";
-            path: str : Directory database storage path
-    return: "JSON object of directories"
+    args:   url : url : "url address to page";
+    return: "requests object"
     """   
-description: 
-            Creating a JSON object and saving it.
-    to-do:
-            1. make a check for the presence of the base
-            2. make a reconciliation of keys
-            3. make a verification of links 
-    args:   catalogs : dict : "Dictionary of directory names and links to them";
-            path: str : Directory database storage path
-    return: "JSON object of directories"
     return requests.get(url)
 
 
 def search_links_directories(soup: BeautifulSoup): 
     """
-    search for catalogs on the galvanized page of the site
-    args: BeautifulSoup object
-    return: dict
+    description:
+            search for catalogs on the galvanized page of the site
+    args:   soup: BeautifulSoup object: "объект класс ... полученный с сайта"
+    return: "a dictionary with the names of directories and links to these directories"
     """
     left_menu = soup.find('div', {'data-name': 'left_menu'})
     li = left_menu.find_all('li')
