@@ -100,10 +100,11 @@ def parser(url):
 
 def main():
     # parser(url='https://www.kufar.by/listings?rgn=all')
-    r = getWebsite(url='https://www.kufar.by/listings?rgn=all')
+    r = getWebsite(url='https://www.kufar.by//listings?prn=13000')
     soup = BeautifulSoup(markup=r.text, features='lxml')
     search_link_page(soup_obj=soup)
-    collection_ads()
+    collection_ads(soup_obj=soup)
+    print(GOODS)
     
 if __name__ == '__main__':
     main()
