@@ -11,4 +11,4 @@
 ## Application architecture
 Пример
 
-![image](https://user-images.githubusercontent.com/56804245/127401862-170e224e-c9f2-464f-bb12-98238036d7cb.png)
+![Frame 1](https://user-images.githubusercontent.com/56804245/127405983-a230d455-35c8-46ba-b18f-0c86810a1ac4.jpg)
