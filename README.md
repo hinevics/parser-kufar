@@ -9,6 +9,6 @@
 **Цель проекта:** Написать программу позволяющую собирать данный с сайта б\у товаров kufar.
 
 ## Application architecture
-Пример
+MyProject.pdf
 
 ![image](https://user-images.githubusercontent.com/56804245/127567528-fe881703-4e00-4cb3-8835-d67eed959c9e.png)
