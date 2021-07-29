@@ -11,4 +11,4 @@
 ## Application architecture
 MyProject.pdf
 
-![image](https://user-images.githubusercontent.com/56804245/127567528-fe881703-4e00-4cb3-8835-d67eed959c9e.png)
+![image](https://github.com/hinevics/parser-kufar/blob/main/MyProject%20-%20Frame%201.jpg)
