@@ -74,16 +74,29 @@ def checking_file(path: str):
         "Flag indicating the presence or absence of a file"
     """
     pass
+
 def page_parser(url: str):
     """
     description:
         "Make a request from the link and collect catalog data from this page"
-        args:
-            
+    args:
+        url: str: "link"
+    return:
+        dict: "dictionary with links"
     """
     pass
 
+def checking_links():
+    pass
 
+def verification_link():
+    """
+    description:
+        "Checking links for repetition"
+    args:
+        link_directory: dict: "Directory link dictionary"
+    """
+    pass
 
 
 def main():
