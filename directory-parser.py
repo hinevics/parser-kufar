@@ -6,12 +6,13 @@ from bs4 import BeautifulSoup
 import requests
 import json
 import re
-
+import os.path
 
 # DEFAULT_URL = r'https://www.kufar.by/listings'
 # DEFAULT_PATH_CATALOGS_DB = r'D:\Development\Coding\PAGE-KUFAR\DB'
 # DEFAULT_NAME_DB = r'directory-database'
-
+DEFAULT_PATH_DIRECTORY_DB = "..\DATA"
+DEFAULT_NAME_DIRECTORY_DB = "directory_link.json"
 
 # def getWebsite(url: str):
 #     """
@@ -64,16 +65,6 @@ import re
 #     catalogs = search_links_directories(soup)
 #     # return  save_catalogs_in_db(catalogs=catalogs, path=DEFAULT_PATH_CATALOGS_DB)
 #     return catalogs
-def checking_file(path: str):
-    """
-    description:
-        "checking for file presence"
-    args:
-        path : str: "Path to the database file for storing category links"
-    return:
-        "Flag indicating the presence or absence of a file"
-    """
-    pass
 
 def page_parser(url: str):
     """
@@ -85,9 +76,7 @@ def page_parser(url: str):
         dict: "dictionary with links"
     """
     pass
-
-def checking_links():
-    pass
+ 
 
 def verification_link():
     """
@@ -99,6 +88,7 @@ def verification_link():
     pass
 
 
+
 def main():
     # """
     # This is for an offline module call
@@ -107,7 +97,14 @@ def main():
     # print(r'save catlog in path: {path}\{name}'.format(path=DEFAULT_PATH_CATALOGS_DB, name=DEFAULT_NAME_DB))
     # save_catalogs_in_db(catalogs=catalogs, path=DEFAULT_PATH_CATALOGS_DB, directory_name=DEFAULT_NAME_DB)
     # print('end work!')
-    checking_file()
-
+    
+    # parsing
+    
+    
+    flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DIRECTORY_DB, b=DEFAULT_NAME_DIRECTORY_DB))
+    if flag:
+        pass
+    else:
+        pass
 if __name__ == '__main__':
     main()
