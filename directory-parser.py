@@ -8,40 +8,30 @@ import json
 import re
 import os.path
 
-# DEFAULT_URL = r'https://www.kufar.by/listings'
 # DEFAULT_PATH_CATALOGS_DB = r'D:\Development\Coding\PAGE-KUFAR\DB'
 # DEFAULT_NAME_DB = r'directory-database'
+DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
 DEFAULT_PATH_DIRECTORY_DB = "..\DATA"
 DEFAULT_NAME_DIRECTORY_DB = "directory_link.json"
 
-# def getWebsite(url: str):
-#     """
-#     description: 
-#             Makes a request to the web page.
-#     args:   url : url : "url address to page";
-#     return: "requests object"
-#     """   
-#     return requests.get(url)
-
-
-# def search_links_directories(soup: BeautifulSoup): 
-#     """
-#     to-do:
-#             1. Сделать проверку на наличия прямой ссылки!
-#     description:
-#             search for catalogs on the galvanized page of the site
-#     args:   soup: BeautifulSoup object: "объект класс ... полученный с сайта"
-#     return: "a dictionary with the names of directories and links to these directories"
-#     """
-#     left_menu = soup.find('div', {'data-name': 'left_menu'})
-#     li = left_menu.find_all('li')
-#     catalogs = dict()
-#     for i_li in li:
-#         link = i_li.find('a').get('href')
-#         text = i_li.find('span').text
-#         if not re.match(pattern='http', string=link):
-#             catalogs[text] = r'https://www.kufar.by/' + link
-#     return catalogs
+def search_links_directories(soup: BeautifulSoup): 
+    """
+    to-do:
+            1. Сделать проверку на наличия прямой ссылки!
+    description:
+            search for catalogs on the galvanized page of the site
+    args:   soup: BeautifulSoup object: "объект класс ... полученный с сайта"
+    return: "a dictionary with the names of directories and links to these directories"
+    """
+    left_menu = soup.find('div', {'data-name': 'left_menu'})
+    li = left_menu.find_all('li')
+    catalogs = dict()
+    for i_li in li:
+        link = i_li.find('a').get('href')
+        text = i_li.find('span').text
+        if not re.match(pattern='http', string=link):
+            catalogs[text] = r'https://www.kufar.by/' + link
+    return catalogs
 
 
 # def save_catalogs_in_db(catalogs: dict, path: str, directory_name: str):
@@ -75,8 +65,11 @@ def page_parser(url: str):
     return:
         dict: "dictionary with links"
     """
-    pass
- 
+    r = requests.get(url=url)
+    soup = BeautifulSoup(r.text, 'lxml')
+    catalogs = search_links_directories(soup)
+    return catalogs
+
 
 def verification_link():
     """
@@ -99,6 +92,7 @@ def main():
     # print('end work!')
     
     # parsing
+    link_directory = page_parser(url=DEFAULT_URL)
     
     
     flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DIRECTORY_DB, b=DEFAULT_NAME_DIRECTORY_DB))
