@@ -11,8 +11,8 @@ import os.path
 # DEFAULT_PATH_CATALOGS_DB = r'D:\Development\Coding\PAGE-KUFAR\DB'
 # DEFAULT_NAME_DB = r'directory-database'
 DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
-DEFAULT_PATH_DIRECTORY_DB = "..\DATA"
-DEFAULT_NAME_DIRECTORY_DB = "directory_link.json"
+DEFAULT_PATH_DIRECTORY_DB = r"..\parser-kufar\DATA"
+DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 
 def search_links_directories(soup: BeautifulSoup): 
     """
@@ -66,7 +66,7 @@ def page_parser(url: str):
         dict: "dictionary with links"
     """
     r = requests.get(url=url)
-    soup = BeautifulSoup(r.text, 'lxml')
+    soup = BeautifulSoup(r.text)
     catalogs = search_links_directories(soup)
     return catalogs
 
@@ -93,12 +93,12 @@ def main():
     
     # parsing
     link_directory = page_parser(url=DEFAULT_URL)
+    print(link_directory)
     
-    
-    flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DIRECTORY_DB, b=DEFAULT_NAME_DIRECTORY_DB))
-    if flag:
-        pass
-    else:
-        pass
+    # flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DIRECTORY_DB, b=DEFAULT_NAME_DIRECTORY_DB))
+    # if flag:
+    #     pass
+    # else:
+    #     pass
 if __name__ == '__main__':
     main()
