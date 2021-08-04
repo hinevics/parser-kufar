@@ -53,8 +53,8 @@ def page_parser(url: str):
 
 
 def parser():
-    page_parser(url=)
-    
+    # page_parser(url=)
+    pass
 
 
 def main():
