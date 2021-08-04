@@ -16,6 +16,7 @@ DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
 DEFAULT_PATH_DIRECTORY_DB = r"D:\Development\Coding\parser-kufar\DATA"
 DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 
+
 def search_links_directories(soup: BeautifulSoup): 
     """
     to-do:
