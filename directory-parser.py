@@ -7,6 +7,8 @@ import requests
 import json
 import re
 import os.path
+import hashlib
+
 
 # DEFAULT_PATH_CATALOGS_DB = r'D:\Development\Coding\PAGE-KUFAR\DB'
 # DEFAULT_NAME_DB = r'directory-database'
@@ -79,7 +81,14 @@ def verification_link(link_directory: dict, path: str, name: str):
         link_directory: dict: "Directory link dictionary"
     """
     with open(file='{path}\{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
-        pass
+        links_directories_verification = json.load(file)
+        for new_name_link in link_directory.items():
+            new_hash_link = hashlib.sha224(new_name_link[1].encode('utf-8')).hexdigest()
+            if  not(new_hash_link in links_directories_verification.keys()):
+                links_directories_verification[new_hash_link] = dict(name=new_name_link[0], link=new_name_link[1])
+            else:
+                print('This link is in the database: {a}'.format(a=new_name_link[1]))
+
 
 def creation_base(link_directory: dict, path: str, name: str):
     """
@@ -100,11 +109,12 @@ def creation_base(link_directory: dict, path: str, name: str):
         """
         links_directories_writing_json = dict()
         for name_link in link_directory.items():
-            hash_link = hash(name_link[1])
+            hash_link = hashlib.sha224(name_link[1].encode('utf-8')).hexdigest()
             if not (hash_link in links_directories_writing_json.keys()):
                 links_directories_writing_json[hash_link] = dict(name=name_link[0], link=name_link[1])
             else:
                 print('this link has been created: {a}'.format(a=name_link[1]))
+        print(links_directories_writing_json)
         json.dump(links_directories_writing_json, file)
 
 
@@ -122,7 +132,7 @@ def main():
     flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DIRECTORY_DB, b=DEFAULT_NAME_DIRECTORY_DB))
     if flag:
         # File find
-        print(True)
+        verification_link(link_directory=link_directory, name=DEFAULT_NAME_DIRECTORY_DB, path=DEFAULT_PATH_DIRECTORY_DB)
     else:
         # File not found 
         creation_base(link_directory=link_directory, name=DEFAULT_NAME_DIRECTORY_DB, path=DEFAULT_PATH_DIRECTORY_DB)
