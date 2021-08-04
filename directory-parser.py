@@ -11,7 +11,7 @@ import os.path
 # DEFAULT_PATH_CATALOGS_DB = r'D:\Development\Coding\PAGE-KUFAR\DB'
 # DEFAULT_NAME_DB = r'directory-database'
 DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
-DEFAULT_PATH_DIRECTORY_DB = r"..\Coding\parser-kufar\DATA"
+DEFAULT_PATH_DIRECTORY_DB = r"D:\Development\Coding\parser-kufar\DATA"
 DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 
 def search_links_directories(soup: BeautifulSoup): 
@@ -66,19 +66,20 @@ def page_parser(url: str):
         dict: "dictionary with links"
     """
     r = requests.get(url=url)
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, 'lxml')
     catalogs = search_links_directories(soup)
     return catalogs
 
 
-def verification_link():
+def verification_link(link_directory: dict, path: str, name: str):
     """
     description:
         "Checking links for repetition"
     args:
         link_directory: dict: "Directory link dictionary"
     """
-    pass
+    with open(file='{path}\{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
+        pass
 
 def creation_base(link_directory: dict, path: str, name: str):
     """
@@ -88,7 +89,7 @@ def creation_base(link_directory: dict, path: str, name: str):
         link_directory: dict: "Directory link dictionary"
     return "JSON object"
     """
-    with open(file='{path}\{name}'.format(path=path, name=name)) as file:
+    with open(file='{path}\{name}'.format(path=path, name=name), mode='w', encoding='utf-8') as file:
         """
         {
             'hash': {
@@ -97,13 +98,14 @@ def creation_base(link_directory: dict, path: str, name: str):
             }
         }
         """
+        links_directories_writing_json = dict()
         for name_link in link_directory.items():
-            print(hash(name_link[1]))
-        # json.dump(link_directory, file)
-    pass
-
-
-
+            hash_link = hash(name_link[1])
+            if not (hash_link in links_directories_writing_json.keys()):
+                links_directories_writing_json[hash_link] = dict(name=name_link[0], link=name_link[1])
+            else:
+                print('this link has been created: {a}'.format(a=name_link[1]))
+        json.dump(links_directories_writing_json, file)
 
 
 def main():
