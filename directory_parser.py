@@ -11,8 +11,23 @@ import hashlib
 
 
 DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
-DEFAULT_PATH_DIRECTORY_DB = r"D:\Development\Coding\parser-kufar\DATA"
+DEFAULT_PATH_DB = r"D:\Development\Coding\parser-kufar\DATA"
 DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
+
+
+def page_parser(url: str):
+    """
+    description:
+        "Make a request from the link and collect catalog data from this page"
+    args:
+        url: str: "link"
+    return:
+        dict: "dictionary with links"
+    """
+    r = requests.get(url=url)
+    soup = BeautifulSoup(r.text, 'lxml')
+    catalogs = search_links_directories(soup)
+    return catalogs
 
 
 def search_links_directories(soup: BeautifulSoup): 
@@ -32,21 +47,6 @@ def search_links_directories(soup: BeautifulSoup):
         text = i_li.find('span').text
         if not re.match(pattern='http', string=link):
             catalogs[text] = r'https://www.kufar.by/' + link
-    return catalogs
-
-
-def page_parser(url: str):
-    """
-    description:
-        "Make a request from the link and collect catalog data from this page"
-    args:
-        url: str: "link"
-    return:
-        dict: "dictionary with links"
-    """
-    r = requests.get(url=url)
-    soup = BeautifulSoup(r.text, 'lxml')
-    catalogs = search_links_directories(soup)
     return catalogs
 
 
@@ -101,13 +101,13 @@ def parser():
     """
     # parsing
     link_directory = page_parser(url=DEFAULT_URL)
-    flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DIRECTORY_DB, b=DEFAULT_NAME_DIRECTORY_DB))
+    flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DB, b=DEFAULT_NAME_DIRECTORY_DB))
     if flag:
         # File find
-        verification_link(link_directory=link_directory, name=DEFAULT_NAME_DIRECTORY_DB, path=DEFAULT_PATH_DIRECTORY_DB)
+        verification_link(link_directory=link_directory, name=DEFAULT_NAME_DIRECTORY_DB, path=DEFAULT_PATH_DB)
     else:
         # File not found 
-        creation_base(link_directory=link_directory, name=DEFAULT_NAME_DIRECTORY_DB, path=DEFAULT_PATH_DIRECTORY_DB)
+        creation_base(link_directory=link_directory, name=DEFAULT_NAME_DIRECTORY_DB, path=DEFAULT_PATH_DB)
 
 
 def main():
@@ -116,7 +116,7 @@ def main():
     """
     print('start parsing')
     parser()
-    print(r'save catlog in path: {path}\{name}'.format(path=DEFAULT_PATH_DIRECTORY_DB, name=DEFAULT_NAME_DIRECTORY_DB))
+    print(r'save catlog in path: {path}\{name}'.format(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_DIRECTORY_DB))
     print('parsing completed')
 
 
