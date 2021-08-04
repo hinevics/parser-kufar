@@ -10,8 +10,6 @@ import os.path
 import hashlib
 
 
-# DEFAULT_PATH_CATALOGS_DB = r'D:\Development\Coding\PAGE-KUFAR\DB'
-# DEFAULT_NAME_DB = r'directory-database'
 DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
 DEFAULT_PATH_DIRECTORY_DB = r"D:\Development\Coding\parser-kufar\DATA"
 DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
@@ -36,28 +34,6 @@ def search_links_directories(soup: BeautifulSoup):
             catalogs[text] = r'https://www.kufar.by/' + link
     return catalogs
 
-
-# def save_catalogs_in_db(catalogs: dict, path: str, directory_name: str):
-#     """
-#     description: 
-#             Creating a JSON object and saving it.
-#     args:   catalogs : dict : "Dictionary of directory names and links to them";
-#             path: str : Directory database storage path
-#     return: "JSON object of directories" 
-#     """
-#     path_db = r'{path}\{directory_name}.json'.format(path=path, directory_name=directory_name)
-#     with open(file=path_db, mode='w', encoding='utf-8') as file:
-#         json.dump(catalogs, file)
-
-# def parser():
-#     """
-#     the body of the module. basic function. (for import)
-#     """
-#     r = getWebsite(DEFAULT_URL)
-#     soup = BeautifulSoup(r.text, 'lxml')
-#     catalogs = search_links_directories(soup)
-#     # return  save_catalogs_in_db(catalogs=catalogs, path=DEFAULT_PATH_CATALOGS_DB)
-#     return catalogs
 
 def page_parser(url: str):
     """
@@ -119,16 +95,10 @@ def creation_base(link_directory: dict, path: str, name: str):
         print(links_directories_writing_json)
         json.dump(links_directories_writing_json, file)
 
-
-def main():
-    # """
-    # This is for an offline module call
-    # """
-    # catalogs = parser()
-    # print(r'save catlog in path: {path}\{name}'.format(path=DEFAULT_PATH_CATALOGS_DB, name=DEFAULT_NAME_DB))
-    # save_catalogs_in_db(catalogs=catalogs, path=DEFAULT_PATH_CATALOGS_DB, directory_name=DEFAULT_NAME_DB)
-    # print('end work!')
-    
+def parser():
+    """
+    the body of the module. basic function. (for import)
+    """
     # parsing
     link_directory = page_parser(url=DEFAULT_URL)
     flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DIRECTORY_DB, b=DEFAULT_NAME_DIRECTORY_DB))
@@ -138,6 +108,18 @@ def main():
     else:
         # File not found 
         creation_base(link_directory=link_directory, name=DEFAULT_NAME_DIRECTORY_DB, path=DEFAULT_PATH_DIRECTORY_DB)
+
+
+def main():
+    """
+    This is to run the module separately
+    """
+    print('start parsing')
+    parser()
+    print(r'save catlog in path: {path}\{name}'.format(path=DEFAULT_PATH_DIRECTORY_DB, name=DEFAULT_NAME_DIRECTORY_DB))
+    print('parsing completed')
+
+
 
 if __name__ == '__main__':
     main()
