@@ -40,7 +40,7 @@ def search_links_directories(soup: BeautifulSoup):
 def page_parser(url: str):
     """
     description:
-        "Make a request from the link and collect catalog data from this page"
+        "Make a request from the link and collect subdirectory data from this page"
     args:
         url: str: "link"
     return:
@@ -52,9 +52,24 @@ def page_parser(url: str):
     return catalogs
 
 
+def link_extraction(path: str, name: str):
+    """
+    description:
+        "function to retrieve links to directories from the database"
+    args:
+        path: str: "path to database"
+        name: str: "database name"
+    yield:
+        "directory link"
+    """
+    with open(file='{a}/{b}'.format(a=path, b=name), mode='r', encoding='utf-8') as file:
+        json_link = json.load(file)
+    for name_link in json_link.values():
+        yield name_link['link']
+
+
 def parser():
-    # page_parser(url=)
-    pass
+    print(link_extraction(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_DIRECTORY_DB))
 
 
 def main():
