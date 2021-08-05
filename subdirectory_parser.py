@@ -69,7 +69,9 @@ def link_extraction(path: str, name: str):
 
 
 def parser():
-    print(link_extraction(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_DIRECTORY_DB))
+    for i in link_extraction(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_DIRECTORY_DB):
+        # Тут добавить то как будут парситься все возможные подкаталоги
+        print(i)
 
 
 def main():
