@@ -1,5 +1,8 @@
 """
 Module for parsing links to directories
+prn=15000 -- Бытовая техника в Беларуси
+https://www.kufar.by//listings?prn=16000 -- Компьютерная техника в Беларуси
+
 """
 
 
@@ -17,27 +20,7 @@ DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 DEFAULT_NAME_SUBDIRECTORY_DB = r"directory_link.json"
 
 
-def search_links_directories(soup: BeautifulSoup): 
-    """
-    to-do:
-            1. Сделать проверку на наличия прямой ссылки!
-    description:
-            search for catalogs on the galvanized page of the site
-    args:   soup: BeautifulSoup object: "объект класс ... полученный с сайта"
-    return: "a dictionary with the names of directories and links to these directories"
-    """
-    left_menu = soup.find('div', {'data-name': 'left_menu'})
-    li = left_menu.find_all('li')
-    catalogs = dict()
-    for i_li in li:
-        link = i_li.find('a').get('href')
-        text = i_li.find('span').text
-        if not re.match(pattern='http', string=link):
-            catalogs[text] = r'https://www.kufar.by/' + link
-    return catalogs
-
-
-def page_parser(url: str):
+def beautifulSoup_object_creation(url: str):
     """
     description:
         "Make a request from the link and collect subdirectory data from this page"
@@ -48,9 +31,15 @@ def page_parser(url: str):
     """
     r = requests.get(url=url)
     soup = BeautifulSoup(r.text, 'lxml')
-    catalogs = search_links_directories(soup)
-    return catalogs
+    return soup
 
+
+def subdirectory_parser(soup:BeautifulSoup):
+    subdirectory = dict(header=soup.find('h1').text)
+    for element in soup.findAll('li'):
+        print(element.find('a').get('href'))
+        print(element.find('span').text)
+        break
 
 def link_extraction(path: str, name: str):
     """
@@ -64,15 +53,21 @@ def link_extraction(path: str, name: str):
     """
     with open(file='{a}/{b}'.format(a=path, b=name), mode='r', encoding='utf-8') as file:
         json_link = json.load(file)
-    for name_link in json_link.values():
-        yield name_link['link']
+    for name_link in json_link.items():
+        yield name_link
 
 
 def parser():
     for i in link_extraction(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_DIRECTORY_DB):
         # Тут добавить то как будут парситься все возможные подкаталоги
+        key_hash = i[0]
+        soup = beautifulSoup_object_creation(url=i[1]['link'])
+        subdirectory_parser(soup=soup)
         print(i)
-
+        break
+    # soup = beautifulSoup_object_creation(url='https://www.kufar.by//listings?prn=15000')
+    # # parser_headers(soup=soup)
+    # subdirectory_parser(soup=soup)
 
 def main():
     parser()
