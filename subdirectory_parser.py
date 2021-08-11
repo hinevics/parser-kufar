@@ -2,7 +2,6 @@
 Module for parsing links to directories
 prn=15000 -- Бытовая техника в Беларуси
 https://www.kufar.by//listings?prn=16000 -- Компьютерная техника в Беларуси
-
 """
 
 
@@ -20,6 +19,13 @@ DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 DEFAULT_NAME_SUBDIRECTORY_DB = r"directory_link.json"
 
 
+def verification_link():
+    pass
+
+
+def creation_base():
+    pass
+
 def beautifulSoup_object_creation(url: str):
     """
     description:
@@ -35,11 +41,25 @@ def beautifulSoup_object_creation(url: str):
 
 
 def subdirectory_parser(soup:BeautifulSoup):
-    subdirectory = dict(header=soup.find('h1').text)
+    """
+    description:
+        ""
+    args:
+       
+       
+    yield:
+        
+        
+    """
+    sub = dict()
     for element in soup.findAll('li'):
-        print(element.find('a').get('href'))
-        print(element.find('span').text)
-        break
+        link = element.find('a').get('href')
+        if re.search(pattern=r'cat', string=link):
+            name = element.find('span').text
+            id_hash = hashlib.sha224('{link}{name}'.format(link=link, name=name).encode('utf-8')).hexdigest()
+            sub['{id_hash}'.format(id_hash=id_hash)] = dict(name=name, link=link)
+    return sub
+
 
 def link_extraction(path: str, name: str):
     """
@@ -58,16 +78,17 @@ def link_extraction(path: str, name: str):
 
 
 def parser():
+    subdirectory_dict = dict()
     for i in link_extraction(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_DIRECTORY_DB):
-        # Тут добавить то как будут парситься все возможные подкаталоги
-        key_hash = i[0]
         soup = beautifulSoup_object_creation(url=i[1]['link'])
-        subdirectory_parser(soup=soup)
-        print(i)
-        break
-    # soup = beautifulSoup_object_creation(url='https://www.kufar.by//listings?prn=15000')
-    # # parser_headers(soup=soup)
-    # subdirectory_parser(soup=soup)
+        subdirectory_dict[i[0]] = subdirectory_parser(soup=soup)
+
+    flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DB, b=DEFAULT_NAME_SUBDIRECTORY_DB))
+    if flag:
+        verification_link()
+    else:
+        creation_base()
+
 
 def main():
     parser()

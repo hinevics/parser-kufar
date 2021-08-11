@@ -93,7 +93,6 @@ def creation_base(link_directory: dict, path: str, name: str):
                 links_directories_writing_json[hash_link] = dict(name=name_link[0], link=name_link[1])
             else:
                 print('this link has been created: {a}'.format(a=name_link[1]))
-        print(links_directories_writing_json)
         json.dump(links_directories_writing_json, file)
 
 def parser():
