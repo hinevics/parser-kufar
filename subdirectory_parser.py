@@ -19,11 +19,27 @@ DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 DEFAULT_NAME_SUBDIRECTORY_DB = r"subdirectory_link.json"
 
 
-def verification_link():
-    pass
+def verification_link(sub_directory: dict, path: str, name: str):
+    # проверить категории
+    # проверить подкатегории
+    with open('{path}/{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
+        old_sub_directory = json.load(fp=file)
+    for new_hash_id_directory in sub_directory.keys():
+        if not(new_hash_id_directory in old_sub_directory.keys()):
+            old_sub_directory[new_hash_id_directory] = sub_directory[new_hash_id_directory]
+    with open('{path}/{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
+        json.dump(obj=..., fp=file)
 
 
 def creation_base(subdirectory_dict : dict, path : str, name : str):
+    """
+    description:
+        "create and write to file"
+    args:
+        subdirectory_dict: dict: "dictionary with links to subcategories";
+        path: str: "path to db";
+        name: str: "db name"
+    """
     with open(file='{path}/{name}'.format(name=name, path=path), mode='w', encoding='utf-8') as file:
         json.dump(obj=subdirectory_dict, fp=file)
 
@@ -35,7 +51,7 @@ def beautifulSoup_object_creation(url: str):
     args:
         url: str: "link"
     return:
-        dict: "dictionary with links"
+        dict: "soup object"
     """
     r = requests.get(url=url)
     soup = BeautifulSoup(r.text, 'lxml')
