@@ -16,15 +16,17 @@ import hashlib
 DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
 DEFAULT_PATH_DB = r"D:\Development\Coding\parser-kufar\DATA"
 DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
-DEFAULT_NAME_SUBDIRECTORY_DB = r"directory_link.json"
+DEFAULT_NAME_SUBDIRECTORY_DB = r"subdirectory_link.json"
 
 
 def verification_link():
     pass
 
 
-def creation_base():
-    pass
+def creation_base(subdirectory_dict : dict, path : str, name : str):
+    with open(file='{path}/{name}'.format(name=name, path=path), mode='w', encoding='utf-8') as file:
+        json.dump(obj=subdirectory_dict, fp=file)
+
 
 def beautifulSoup_object_creation(url: str):
     """
@@ -87,11 +89,22 @@ def parser():
     if flag:
         verification_link()
     else:
-        creation_base()
-
+        creation_base(subdirectory_dict=subdirectory_dict, name=DEFAULT_NAME_SUBDIRECTORY_DB, path=DEFAULT_PATH_DB)
+    return subdirectory_dict
 
 def main():
-    parser()
+    """
+    This is to run the module separately
+    """
+    print('START PARSING')
+    print('...')
+    subdirectory_dict = parser()
+    print('RESULT')
+    for i in subdirectory_dict.keys():
+        print(subdirectory_dict[i])
+    print(r'save catlog in path: {path}\{name}'.format(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB))
+    print('PARSING COMPLETED')
+
 
 if __name__ == '__main__':
     main()
