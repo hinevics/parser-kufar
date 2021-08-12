@@ -20,15 +20,18 @@ DEFAULT_NAME_SUBDIRECTORY_DB = r"subdirectory_link.json"
 
 
 def verification_link(sub_directory: dict, path: str, name: str):
-    # проверить категории
-    # проверить подкатегории
+    # Протестировать!!!
     with open('{path}/{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
         old_sub_directory = json.load(fp=file)
     for new_hash_id_directory in sub_directory.keys():
         if not(new_hash_id_directory in old_sub_directory.keys()):
             old_sub_directory[new_hash_id_directory] = sub_directory[new_hash_id_directory]
+        else:
+            for i in set(sub_directory[new_hash_id_directory].keys()).difference(set(old_sub_directory[new_hash_id_directory].keys())):
+                old_sub_directory[new_hash_id_directory][i] = sub_directory[new_hash_id_directory][i]
     with open('{path}/{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
-        json.dump(obj=..., fp=file)
+        json.dump(obj=old_sub_directory, fp=file)
+    return old_sub_directory
 
 
 def creation_base(subdirectory_dict : dict, path : str, name : str):
@@ -102,22 +105,22 @@ def parser():
         subdirectory_dict[i[0]] = subdirectory_parser(soup=soup)
 
     flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DB, b=DEFAULT_NAME_SUBDIRECTORY_DB))
-    if flag:
-        verification_link()
-    else:
-        creation_base(subdirectory_dict=subdirectory_dict, name=DEFAULT_NAME_SUBDIRECTORY_DB, path=DEFAULT_PATH_DB)
+    # if flag:
+    #     verification_link(sub_directory=subdirectory_dict, path=DEFAULT_PATH_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB)
+    # else:
+    #     creation_base(subdirectory_dict=subdirectory_dict, name=DEFAULT_NAME_SUBDIRECTORY_DB, path=DEFAULT_PATH_DB)
+    verification_link(sub_directory=subdirectory_dict, path=DEFAULT_PATH_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB)
     return subdirectory_dict
 
 def main():
     """
     This is to run the module separately
     """
-    print('START PARSING')
-    print('...')
+    print('START PARSING ...')
     subdirectory_dict = parser()
     print('RESULT')
-    for i in subdirectory_dict.keys():
-        print(subdirectory_dict[i])
+    # for i in subdirectory_dict.keys():
+    #     print(subdirectory_dict[i])
     print(r'save catlog in path: {path}\{name}'.format(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB))
     print('PARSING COMPLETED')
 
