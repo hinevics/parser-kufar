@@ -29,7 +29,7 @@ def verification_link(sub_directory: dict, path: str, name: str):
         else:
             for i in set(sub_directory[new_hash_id_directory].keys()).difference(set(old_sub_directory[new_hash_id_directory].keys())):
                 old_sub_directory[new_hash_id_directory][i] = sub_directory[new_hash_id_directory][i]
-    with open('{path}/{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
+    with open('{path}/{name}'.format(path=path, name=name), mode='w', encoding='utf-8') as file:
         json.dump(obj=old_sub_directory, fp=file)
     return old_sub_directory
 
@@ -105,11 +105,12 @@ def parser():
         subdirectory_dict[i[0]] = subdirectory_parser(soup=soup)
 
     flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DB, b=DEFAULT_NAME_SUBDIRECTORY_DB))
-    # if flag:
-    #     verification_link(sub_directory=subdirectory_dict, path=DEFAULT_PATH_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB)
-    # else:
-    #     creation_base(subdirectory_dict=subdirectory_dict, name=DEFAULT_NAME_SUBDIRECTORY_DB, path=DEFAULT_PATH_DB)
-    verification_link(sub_directory=subdirectory_dict, path=DEFAULT_PATH_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB)
+    if flag:
+        print('s ver')
+        verification_link(sub_directory=subdirectory_dict, path=DEFAULT_PATH_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB)
+    else:
+        print('s creation')
+        creation_base(subdirectory_dict=subdirectory_dict, name=DEFAULT_NAME_SUBDIRECTORY_DB, path=DEFAULT_PATH_DB)
     return subdirectory_dict
 
 def main():
