@@ -20,7 +20,6 @@ DEFAULT_NAME_SUBDIRECTORY_DB = r"subdirectory_link.json"
 
 
 def verification_link(sub_directory: dict, path: str, name: str):
-    # Протестировать!!!
     with open('{path}/{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
         old_sub_directory = json.load(fp=file)
     for new_hash_id_directory in sub_directory.keys():
