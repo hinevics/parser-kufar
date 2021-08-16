@@ -45,7 +45,7 @@ def search_links_directories(soup: BeautifulSoup):
     for i_li in li:
         link = i_li.find('a').get('href')
         text = i_li.find('span').text
-        if not re.match(pattern='http', string=link):
+        if (not re.match(pattern='http', string=link)) and re.search(pattern='prn', string=link):
             catalogs[text] = r'https://www.kufar.by/' + link
     return catalogs
 
@@ -66,7 +66,8 @@ def verification_link(link_directory: dict, path: str, name: str):
                 print('this link added: {a}'.format(a=new_name_link[1]))
             else:
                 print('This link is in the database: {a}'.format(a=new_name_link[1]))
-
+    with open(file='{path}\{name}'.format(path=path, name=name), mode='w', encoding='utf-8') as file:
+        json.dump(links_directories_verification, file)
 
 def creation_base(link_directory: dict, path: str, name: str):
     """
@@ -92,7 +93,6 @@ def creation_base(link_directory: dict, path: str, name: str):
                 links_directories_writing_json[hash_link] = dict(name=name_link[0], link=name_link[1])
             else:
                 print('this link has been created: {a}'.format(a=name_link[1]))
-        print(links_directories_writing_json)
         json.dump(links_directories_writing_json, file)
 
 def parser():
