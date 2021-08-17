@@ -17,6 +17,20 @@ NUMBER_LINKS_PAGES_CATALOG = {}
 # products from pages
 GOODS = []
 
+# It's in development. 
+def parser_location(location: str):
+    """
+    Highlights location and coordinates
+    """
+    pass
+
+# It's in development. 
+def parser_data_and_time(data_time: str):
+    """
+    Highlights time and date. Converts to UTC
+    """
+    return data_time
+
 
 def collection_ads(soup_obj: BeautifulSoup):
     article = soup_obj.find('article')
@@ -79,6 +93,8 @@ def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_ur
         soup = beautifulSoup_object_creation(url='{d_url}/{link}'.format(d_url=d_url, link=link), header=header)
         search_link_page(soup_obj=soup)
         max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
+        collection_ads(soup_obj=soup)
+        print(len(GOODS))
         break
 
 def main():
