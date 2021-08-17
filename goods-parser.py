@@ -93,8 +93,17 @@ def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_ur
         soup = beautifulSoup_object_creation(url='{d_url}/{link}'.format(d_url=d_url, link=link), header=header)
         search_link_page(soup_obj=soup)
         max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
-        collection_ads(soup_obj=soup)
-        print(len(GOODS))
+        list_not_keys = []
+        i = 2
+        while i < max_page:
+            try:
+                soup = beautifulSoup_object_creation(url=NUMBER_LINKS_PAGES_CATALOG[str(i)], header=header)
+                search_link_page(soup_obj=soup)
+                collection_ads(soup_obj=soup)
+                i += 1
+            except KeyError:
+                soup = beautifulSoup_object_creation(url=NUMBER_LINKS_PAGES_CATALOG[str(i-1)], header=header)
+                search_link_page(soup_obj=soup)
         break
 
 def main():
