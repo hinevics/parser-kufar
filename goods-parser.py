@@ -16,6 +16,7 @@ DEFAULT_NAME_SUBDIRECTORY_DB = r"subdirectory_link.json"
 NUMBER_LINKS_PAGES_CATALOG = {}
 # products from pages
 GOODS = []
+DB = dict()
 
 # It's in development. 
 def parser_location(location: str):
@@ -87,13 +88,17 @@ def reading_links_subdirectories(path:str, name: str):
         for subdir in subdirlinks[directory_hash].values():
             yield subdir['link']
 
+
+def saver_goods(goods:list):
+    pass
+
+
 def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_url:str=DEFAULT_URL, header:dict=DEFAULT_HEADER):
     # for link in reading_links_subdirectories(path=DEFAULT_NAME_DIRECTORY_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB)
     for link in reading_links_subdirectories(path=path, name=name):
         soup = beautifulSoup_object_creation(url='{d_url}/{link}'.format(d_url=d_url, link=link), header=header)
         search_link_page(soup_obj=soup)
-        max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys()))
-        list_not_keys = []
+        max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys(), key=lambda x: int(x) if x != '' else 0))
         i = 2
         while i < max_page:
             try:
@@ -104,7 +109,7 @@ def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_ur
             except KeyError:
                 soup = beautifulSoup_object_creation(url=NUMBER_LINKS_PAGES_CATALOG[str(i-1)], header=header)
                 search_link_page(soup_obj=soup)
-        break
+        saver_goods(goods=GOODS)
 
 def main():
     parser()
