@@ -13,7 +13,7 @@ import os.path
 import hashlib
 
 
-DEFAULT_URL = r'https://www.kufar.by/listings?rgn=all'
+DEFAULT_URL = r'https://www.kufar.by'
 DEFAULT_PATH_DB = r"D:\Development\Coding\parser-kufar\DATA"
 DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 DEFAULT_NAME_SUBDIRECTORY_DB = r"subdirectory_link.json"
@@ -60,7 +60,7 @@ def beautifulSoup_object_creation(url: str):
     return soup
 
 
-def subdirectory_parser(soup:BeautifulSoup):
+def subdirectory_parser(soup:BeautifulSoup, url:str):
     """
     description:
         ""
@@ -73,7 +73,7 @@ def subdirectory_parser(soup:BeautifulSoup):
     """
     sub = dict()
     for element in soup.findAll('li'):
-        link = element.find('a').get('href')
+        link = '{link}{sublink}'.format(sublink=element.find('a').get('href'), link=url)
         if re.search(pattern=r'cat', string=link):
             name = element.find('span').text
             id_hash = hashlib.sha224('{link}{name}'.format(link=link, name=name).encode('utf-8')).hexdigest()
@@ -101,7 +101,7 @@ def parser():
     subdirectory_dict = dict()
     for i in link_extraction(path=DEFAULT_PATH_DB, name=DEFAULT_NAME_DIRECTORY_DB):
         soup = beautifulSoup_object_creation(url=i[1]['link'])
-        subdirectory_dict[i[0]] = subdirectory_parser(soup=soup)
+        subdirectory_dict[i[0]] = subdirectory_parser(soup=soup, url=DEFAULT_URL)
 
     flag = os.path.isfile('{a}\{b}'.format(a=DEFAULT_PATH_DB, b=DEFAULT_NAME_SUBDIRECTORY_DB))
     if flag:
