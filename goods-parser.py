@@ -10,6 +10,7 @@ DEFAULT_URL = r'https://www.kufar.by'
 DEFAULT_PATH_DB = r"D:\Development\Coding\parser-kufar\DATA"
 DEFAULT_NAME_DIRECTORY_DB = r"directory_link.json"
 DEFAULT_NAME_SUBDIRECTORY_DB = r"subdirectory_link.json"
+DEFAULT_NAME_GOODS_DB = r'goods.json'
 
 
 # links to pages in this category
@@ -85,17 +86,29 @@ def reading_links_subdirectories(path:str, name: str):
     with open(file='{path}/{name}'.format(path=path, name=name), mode='r', encoding='utf-8') as file:
         subdirlinks = json.load(fp=file)
     for directory_hash in subdirlinks.keys():
-        for subdir in subdirlinks[directory_hash].values():
-            yield subdir['link']
+        for subdir in subdirlinks[directory_hash].items():
+            yield (directory_hash, subdir[0], subdir[1]['link'])
+        GOODS.clear()
+        NUMBER_LINKS_PAGES_CATALOG.clear()
 
 
-def saver_goods(goods:list):
-    pass
+def create_goods_db(hash_dir:str, hash_subdir:str):
+    if not (hash_dir in DB.keys()):
+        DB[hash_dir] = {hash_subdir: GOODS}
+    else:
+        DB[hash_dir].update({hash_subdir:GOODS})
+
+
+def save_db_goods(path:str, name:str):
+    with open(file='{path}/{name}'.format(path=path, name=name), mode='w', encoding='uth=f-8') as file:
+        json.dump(obj=DB, fp=file)
 
 
 def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_url:str=DEFAULT_URL, header:dict=DEFAULT_HEADER):
-    # for link in reading_links_subdirectories(path=DEFAULT_NAME_DIRECTORY_DB, name=DEFAULT_NAME_SUBDIRECTORY_DB)
-    for link in reading_links_subdirectories(path=path, name=name):
+    for dir_subdir_link in reading_links_subdirectories(path=path, name=name):
+        dirhash = dir_subdir_link[0]
+        subdirhash = dir_subdir_link[1]
+        link = dir_subdir_link[2]
         soup = beautifulSoup_object_creation(url='{d_url}/{link}'.format(d_url=d_url, link=link), header=header)
         search_link_page(soup_obj=soup)
         max_page = int(max(NUMBER_LINKS_PAGES_CATALOG.keys(), key=lambda x: int(x) if x != '' else 0))
@@ -109,7 +122,15 @@ def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_ur
             except KeyError:
                 soup = beautifulSoup_object_creation(url=NUMBER_LINKS_PAGES_CATALOG[str(i-1)], header=header)
                 search_link_page(soup_obj=soup)
-        saver_goods(goods=GOODS)
+        create_goods_db(hash_dir=dirhash, hash_subdir=subdirhash)
+    save_db_goods(path=DEFAULT_PATH_DB, )
+    
+    # for dir_subdir_link in reading_links_subdirectories(path=path, name=name):
+    #     dirhash = dir_subdir_link[0]
+    #     subdirhash = dir_subdir_link[1]
+    #     link = dir_subdir_link[2]
+    #     saver_goods(goods=[link], hash_dir=dirhash, hash_subdir=subdirhash)
+
 
 def main():
     parser()
