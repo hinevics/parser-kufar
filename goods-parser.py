@@ -59,8 +59,11 @@ def collection_ads(soup_obj: BeautifulSoup):
 
 def search_link_page(soup_obj: BeautifulSoup):
     """
-    Search for links to other catalog pages
+   , Search for links to other catalog pages
     """
+    if soup_obj.find('div', {'data-name':'listings-pagination'}) is None:
+        print(soup_obj)
+        input()
     numbers_webpages = soup_obj.find('div', {'data-name':'listings-pagination'}).find_all('a')
     # Get page numbers and links
     for i in numbers_webpages:
@@ -104,8 +107,12 @@ def save_db_goods(path:str, name:str):
         json.dump(obj=DB, fp=file)
 
 
-def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_url:str=DEFAULT_URL, header:dict=DEFAULT_HEADER):
-    for dir_subdir_link in reading_links_subdirectories(path=path, name=name):
+def parser(path:str=DEFAULT_PATH_DB,
+           name_sub:str=DEFAULT_NAME_SUBDIRECTORY_DB,
+           d_url:str=DEFAULT_URL,
+           header:dict=DEFAULT_HEADER,
+           name_goods:str=DEFAULT_NAME_GOODS_DB):
+    for dir_subdir_link in reading_links_subdirectories(path=path, name=name_sub):
         dirhash = dir_subdir_link[0]
         subdirhash = dir_subdir_link[1]
         link = dir_subdir_link[2]
@@ -123,7 +130,11 @@ def parser(path:str=DEFAULT_PATH_DB, name:str=DEFAULT_NAME_SUBDIRECTORY_DB, d_ur
                 soup = beautifulSoup_object_creation(url=NUMBER_LINKS_PAGES_CATALOG[str(i-1)], header=header)
                 search_link_page(soup_obj=soup)
         create_goods_db(hash_dir=dirhash, hash_subdir=subdirhash)
-    save_db_goods(path=DEFAULT_PATH_DB, )
+        
+        if i == 3:
+            print('stop')
+            break
+    save_db_goods(path=path, name=name_goods)
     
     # for dir_subdir_link in reading_links_subdirectories(path=path, name=name):
     #     dirhash = dir_subdir_link[0]
